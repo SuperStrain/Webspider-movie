@@ -32,7 +32,7 @@ def getData(baseurl):
 #得到指定一个URL网页内容
 def askULR(url):
     head={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"}
-        #head信息用于伪装成浏览器，User-Agent，告诉豆瓣服务器我们能接受怎样
+        #head信息用于伪装成浏览器，User-Agent，告诉豆瓣服务器我们能接受怎样的服务
     request=urllib.request.Request(url,headers=head)
     html=""
     try:
