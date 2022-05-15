@@ -1,4 +1,8 @@
-
+# -*- codeing= utf-8 -*-
+# @Time : 2022/5/15 11:12
+# @Author : Yina
+# @File : f.py
+# @Software: PyCharm
 import urllib.request
 #获取一个get请求
 # response=urllib.request.urlopen("http://www.baidu.com")

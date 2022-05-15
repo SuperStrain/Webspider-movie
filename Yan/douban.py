@@ -1,3 +1,9 @@
+# -*- codeing= utf-8 -*-
+# @Time : 2022/5/15 11:12
+# @Author : Yina
+# @File : f.py
+# @Software: PyCharm
+
 from bs4 import BeautifulSoup #网页解析
 import re   #正则表达式，进行文字匹配
 import urllib.request,urllib.error  #制定URL
