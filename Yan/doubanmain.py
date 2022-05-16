@@ -17,15 +17,35 @@ def main():
     savepath=".\\豆瓣电影Top250.xls"
     # 3、保存数据
     saveData(savepath)
-    askULR("https://movie.douban.com/top250?start=")
+
+findLink=re.compile(r'<a href="(.*?)">')      #影片链接
+findimg=re.compile(r'<img.*src="(.*?)" width.*>')#影片图片，re.S表示让换行符包含在其中
+findtitle=re.compile(r'<span class="title">(.*?)</span>')#片名
+findscore=re.compile(r'<span class="rating_num" property="v:average">(.*)</span>')#影片评分
+findFilmcritic=re.compile(r'<span>(\d*)人评价</span>')#影评人数
+findoverview=re.compile(r'<span class="inq">(.*)</span>')#找到影片概况
+findcontent=re.compile(r'<p class="">(.*?)</p>',re.S)#影片内容
 
 def getData(baseurl):
     datalist=[]
-
     for i in range(0,10):
         url=baseurl+str(i*25)
+        #https://movie.douban.com/top250?start=i*25
         html=askULR(url)
         # 2、逐一解析数据
+        soup =BeautifulSoup(html,"html.parser")
+        for item in soup.find_all('div',class_="item"): #类要加下划线,查找符合要求的字符串形成列表
+            # print(item) #测试，查看电影item全部信息
+            data=[]     #保存一部电影的所有信息
+            item=str(item)
+            link=re.findall(findLink,item)[0]#re库铜锅正则表达式查找第一个信息信息
+            img=re.findall(findimg,item)[0]
+            title=re.findall(findtitle,item)  #片名只有一个中文名
+            score=re.findall(findscore,item)[0]
+            filmcritic=re.findall(findFilmcritic,item)[0]
+            overview=re.findall(findoverview,item)[0]
+            content=re.findall(findcontent,item)[0]
+            print(content)
     return datalist
 
 
@@ -38,7 +58,7 @@ def askULR(url):
     try:
         response=urllib.request.urlopen(request)
         html=response.read().decode('utf-8')
-        print(html)
+        # print(html)
     except urllib.error.URLError as e:
         if hasattr(e,"code"):
             print(e.code)
