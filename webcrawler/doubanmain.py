@@ -12,11 +12,9 @@ import sqlite3  #进行SQLite数据库操作
 
 def main():
     baseurl="https://movie.douban.com/top250?start="
-    # 1、爬取网页
-    datalist=getData(baseurl)
-    savepath=".\\豆瓣电影Top250.xls"
-    # 3、保存数据
-    saveData(savepath)
+    datalist=getData(baseurl)   # 1、爬取网页+2、逐一解析数据
+    savepath="豆瓣电影Top250.xls"
+    saveData(savepath,datalist)    # 3、保存数据
 
 findLink=re.compile(r'<a href="(.*?)">')      #影片链接
 findimg=re.compile(r'<img.*src="(.*?)" width.*>')#影片图片，re.S表示让换行符包含在其中
@@ -26,7 +24,7 @@ findFilmcritic=re.compile(r'<span>(\d*)人评价</span>')#影评人数
 findoverview=re.compile(r'<span class="inq">(.*)</span>')#影片概况
 findcontent=re.compile(r'<p class="">(.*?)</p>',re.S)#影片内容
 
-#爬取网页
+#1、爬取网页 +2、逐一解析数据
 def getData(baseurl):
     datalist=[]
     for i in range(0,10):
@@ -90,7 +88,7 @@ def getData(baseurl):
 def askULR(url):
     head={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"}
         #head信息用于伪装成浏览器，User-Agent，告诉豆瓣服务器我们能接受怎样格式的信息
-    request=urllib.request.Request(url,headers=head)
+    request=urllib.request.Request(url,headers=head)    #向服务器发送请求
     html=""
     try:
         response=urllib.request.urlopen(request)
@@ -104,9 +102,21 @@ def askULR(url):
     return html
 
 # 保存数据
-def saveData(savepath):
-    print(" ")
+def saveData(savepath,datalist):
+    workbook = xlwt.Workbook(encoding='utf-8',style_compression=0)
+    worksheet = workbook.add_sheet('豆瓣电影top250',cell_overwrite_ok=True)
+    #表格头部信息
+    col=("电影详情链接","电影图片链接","影片中文名","影片外国名","电影评分","评价人数","电影概况","相关信息")
+    for i in range(0,8):
+        worksheet.write(0,i,col[i])
+    for i in range(0,250):
+        print("正在生成第%d条电影资讯"%(i+1))
+        data=datalist[i]
+        for j in range(0,8):
+            worksheet.write(i+1,j,data[j])
+    workbook.save(savepath)
 
 if __name__=='__main__':
     main()
+    print("爬取完毕！")
 
