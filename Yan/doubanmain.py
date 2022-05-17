@@ -23,9 +23,10 @@ findimg=re.compile(r'<img.*src="(.*?)" width.*>')#影片图片，re.S表示让�
 findtitle=re.compile(r'<span class="title">(.*?)</span>')#片名
 findscore=re.compile(r'<span class="rating_num" property="v:average">(.*)</span>')#影片评分
 findFilmcritic=re.compile(r'<span>(\d*)人评价</span>')#影评人数
-findoverview=re.compile(r'<span class="inq">(.*)</span>')#找到影片概况
+findoverview=re.compile(r'<span class="inq">(.*)</span>')#影片概况
 findcontent=re.compile(r'<p class="">(.*?)</p>',re.S)#影片内容
 
+#爬取网页
 def getData(baseurl):
     datalist=[]
     for i in range(0,10):
@@ -38,14 +39,50 @@ def getData(baseurl):
             # print(item) #测试，查看电影item全部信息
             data=[]     #保存一部电影的所有信息
             item=str(item)
+
+            #添加链接
             link=re.findall(findLink,item)[0]#re库铜锅正则表达式查找第一个信息信息
+            data.append(link)
+
+            #添加图片
             img=re.findall(findimg,item)[0]
+            data.append(img)
+
+            #添加标题
             title=re.findall(findtitle,item)  #片名只有一个中文名
+            if len(title)==2:
+                ctitle=title[0]
+                data.append(ctitle)
+                otitle=title[1].replace("/","")
+                data.append(otitle)
+            else:
+                data.append(title[0])
+                data.append(" ")#留空防止Excel表格乱序
+
+            #添加评分
             score=re.findall(findscore,item)[0]
+            data.append(score)
+
+            #添加影评
             filmcritic=re.findall(findFilmcritic,item)[0]
-            overview=re.findall(findoverview,item)[0]
+            data.append(filmcritic)
+
+            #添加概述（概述有可能不存在）
+            overview=re.findall(findoverview,item)  #弄清楚为什么有的可以加[0]，有的不可以？？
+            if len(overview)!=0:
+                overview=overview[0].replace('。','')
+                data.append(overview)
+            else:
+                data.append(" ")
+
+            #影片内容（主演等）
             content=re.findall(findcontent,item)[0]
-            print(content)
+            content=re.sub('<br(\s+)?/>(\s+)?'," ",content)#去掉<br/>
+            content=re.sub('/'," ",content)  #替换/
+            data.append(content.strip())    #去掉前后的空格
+
+            datalist.append(data)   #把处理好的一部电影信息放入到数据列表里
+    # print(datalist)  # 用于测试
     return datalist
 
 
