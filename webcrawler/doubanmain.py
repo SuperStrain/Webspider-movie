@@ -13,8 +13,14 @@ import sqlite3  #进行SQLite数据库操作
 def main():
     baseurl="https://movie.douban.com/top250?start="
     datalist=getData(baseurl)   # 1、爬取网页+2、逐一解析数据
-    savepath="豆瓣电影Top250.xls"
-    saveData(savepath,datalist)    # 3、保存数据
+    # 3、保存数据
+    #（1）保存到Excel表格
+    # savepath="豆瓣电影Top250.xls"
+    # saveData(savepath, datalist)
+    #（2）保存到数据库
+    dbpath="movie.db"
+    saveDataToDB(dbpath,datalist)
+
 
 findLink=re.compile(r'<a href="(.*?)">')      #影片链接
 findimg=re.compile(r'<img.*src="(.*?)" width.*>')#影片图片，re.S表示让换行符包含在其中
@@ -101,7 +107,7 @@ def askULR(url):
             print(e.reason)
     return html
 
-# 保存数据
+# 保存数据到Excel表格
 def saveData(savepath,datalist):
     workbook = xlwt.Workbook(encoding='utf-8',style_compression=0)
     worksheet = workbook.add_sheet('豆瓣电影top250',cell_overwrite_ok=True)
@@ -116,7 +122,55 @@ def saveData(savepath,datalist):
             worksheet.write(i+1,j,data[j])
     workbook.save(savepath)
 
+#保存到数据库
+def saveDataToDB(dbpath,datalist):
+    init_db(dbpath)
+    conn=sqlite3.connect(dbpath)
+    cur = conn.cursor()
+
+    for data in datalist:
+        for index in range(len(data)):
+            if index==4 or index==5:
+                continue
+            data[index]='"'+data[index]+'"'
+        sql='''
+            insert into movie250
+            (
+            info_link,pic_link,cname,ename,score,rated,instroduction,info
+            )
+            values(%s)
+        '''%",".join(data)
+        print(sql)
+        cur.execute(sql)
+        conn.commit()
+    cur.close()
+    conn.close()
+
+def init_db(dbpath):
+    sql='''
+        create table movie250
+        (
+        id integer primary key autoincrement,
+        info_link text,
+        pic_link text,
+        cname varchar,
+        ename varchar,
+        score numeric,
+        rated numeric,
+        instroduction text,
+        info text
+        )
+    '''
+    coon = sqlite3.connect(dbpath)
+    cursor=coon.cursor()
+    cursor.execute(sql)
+    coon.commit()
+    coon.close()
+    print("数据库创建完成！")
+
 if __name__=='__main__':
     main()
     print("爬取完毕！")
+
+
 
