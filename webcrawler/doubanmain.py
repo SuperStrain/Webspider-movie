@@ -18,7 +18,7 @@ def main():
     # savepath="豆瓣电影Top250.xls"
     # saveData(savepath, datalist)
     #（2）保存到数据库
-    dbpath="movie.db"
+    dbpath="movie1.db"
     saveDataToDB(dbpath,datalist)
 
 
