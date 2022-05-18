@@ -18,7 +18,7 @@ def main():
     # savepath="豆瓣电影Top250.xls"
     # saveData(savepath, datalist)
     #（2）保存到数据库
-    dbpath="movie1.db"
+    dbpath="movie.db"
     saveDataToDB(dbpath,datalist)
 
 
@@ -58,6 +58,7 @@ def getData(baseurl):
                 ctitle=title[0]
                 data.append(ctitle)
                 otitle=title[1].replace("/","")
+                otitle=otitle.strip()  #防止出现NBSP乱码！！！！
                 data.append(otitle)
             else:
                 data.append(title[0])
@@ -83,7 +84,9 @@ def getData(baseurl):
             content=re.findall(findcontent,item)[0]
             content=re.sub('<br(\s+)?/>(\s+)?'," ",content)#去掉<br/>
             content=re.sub('/'," ",content)  #替换/
-            data.append(content.strip())    #去掉前后的空格
+            content = content.replace(u'\xa0', ' ')#防止出现NBSP乱码
+            content = content.strip()  # 去掉前后的空格
+            data.append(content)
 
             datalist.append(data)   #把处理好的一部电影信息放入到数据列表里
     # print(datalist)  # 用于测试

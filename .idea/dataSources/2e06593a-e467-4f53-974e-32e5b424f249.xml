@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="movie1.db">
+<dataSource name="movie2.db">
   <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.31">
     <root id="1">
       <ServerVersion>3.36.0</ServerVersion>
