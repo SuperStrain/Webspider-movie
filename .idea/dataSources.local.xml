@@ -3,8 +3,6 @@
   <component name="dataSourceStorageLocal" created-in="PY-213.5744.248">
     <data-source name="movie.db" uuid="5776ba66-3bbe-4eb1-ab6d-7f8913d30cd5">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
-      <secret-storage>master_key</secret-storage>
-      <auth-provider>no-auth</auth-provider>
       <schema-mapping />
     </data-source>
   </component>

@@ -18,6 +18,7 @@ def main():
     # savepath="豆瓣电影Top250.xls"
     # saveData(savepath, datalist)
     #（2）保存到数据库
+    #4、用flask框架可视化（新创建项目）
     dbpath="movie.db"
     saveDataToDB(dbpath,datalist)
 
