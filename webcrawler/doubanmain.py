@@ -86,6 +86,7 @@ def getData(baseurl):
             content=re.sub('<br(\s+)?/>(\s+)?'," ",content)#去掉<br/>
             content=re.sub('/'," ",content)  #替换/
             content = content.replace(u'\xa0', ' ')#防止出现NBSP乱码
+            content=content.replace('...','...\n')
             content = content.strip()  # 去掉前后的空格
             data.append(content)
 

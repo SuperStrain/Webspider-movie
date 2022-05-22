@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="PY-213.5744.248">
-    <data-source name="movie.db" uuid="5776ba66-3bbe-4eb1-ab6d-7f8913d30cd5">
+    <data-source name="movie.db" uuid="352a7edf-42b7-410a-ab17-04cf491d7ca0">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <auth-provider>no-auth</auth-provider>
       <schema-mapping />
     </data-source>
   </component>
